@@ -1,0 +1,34 @@
+server:
+  port: 8080
+
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/parking
+    username: parking
+    password: parking
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    properties:
+      hibernate:
+        criteria:
+          literal_handling_mode: bind
+        query:
+          in_clause_parameter_padding: true
+        jdbc:
+          batch_size: 50
+        order_inserts: true
+        show_sql: true
+        format_sql: true
+  liquibase:
+    change-log: db/migration/liquibase-changeLog.xml
+  mvc:
+    format:
+      date-time: yyyy-MM-dd'T'HH:mm:ss.SSSz
+      date: yyyy-MM-dd
+
+parking:
+  capacity: 200
+
+springdoc:
+  api-docs:
+    enabled: true

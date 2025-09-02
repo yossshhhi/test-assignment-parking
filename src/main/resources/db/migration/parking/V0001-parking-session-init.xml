@@ -1,0 +1,40 @@
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="
+       http://www.liquibase.org/xml/ns/dbchangelog
+       http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.27.xsd">
+
+    <changeSet author="Ussenova Arailym" id="2025-08-15-1">
+        <createTable tableName="parking_session" remarks="Парковка">
+            <column name="id" type="UUID" remarks="Идентификатор">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="plate_number" type="varchar(16)" remarks="Номер автомобиля"/>
+            <column name="vehicle_type" type="varchar(16)" remarks="Тип автомобиля"/>
+            <column name="entry_time" type="timestamptz" remarks="Время заезда"/>
+            <column name="exit_time" type="timestamptz" remarks="Время выезда"/>
+            <column name="active" type="boolean" remarks="Флаг активности парковки"/>
+        </createTable>
+
+        <addNotNullConstraint tableName="parking_session" columnName="plate_number"/>
+        <addNotNullConstraint tableName="parking_session" columnName="vehicle_type"/>
+        <addNotNullConstraint tableName="parking_session" columnName="entry_time"/>
+        <addNotNullConstraint tableName="parking_session" columnName="active"/>
+
+        <createIndex tableName="parking_session" indexName="ix_active">
+            <column name="active"/>
+        </createIndex>
+
+        <createIndex tableName="parking_session" indexName="ix_plate_active">
+            <column name="plate_number"/>
+            <column name="active"/>
+        </createIndex>
+
+        <sql>
+            CREATE UNIQUE INDEX ux_open_session_by_plate
+                ON parking_session(plate_number)
+                WHERE active;
+        </sql>
+    </changeSet>
+</databaseChangeLog>
